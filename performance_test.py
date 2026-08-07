@@ -1,49 +1,31 @@
 import time
 import tracemalloc
-
+import logging
 from my_big_number import MyBigNumber
 
+# Disable logging during performance testing for accurate CPU measurement
+logging.disable(logging.CRITICAL)
 
-# Create the calculator
 calculator = MyBigNumber()
 
-# Test data
+# Benchmark Workload Setup
 large_number = "9" * 10_000
 small_number = "1"
-
-# Number of repetitions
 number_of_tests = 10
 
-
-# Start memory measurement
 tracemalloc.start()
-
-# Start timer
 start_time = time.perf_counter()
 
-
-# Run the addition repeatedly
 for _ in range(number_of_tests):
     calculator.sum(large_number, small_number)
 
-
-# Stop timer
 end_time = time.perf_counter()
-
-
-# Get memory usage
 current, peak = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 
-
-# Calculate results
-execution_time = end_time - start_time
-peak_memory = peak / (1024 * 1024)
-
-
-# Display results
-print("=== PERFORMANCE TEST ===")
-print("Number of calculations:", number_of_tests)
-print("Large number digits:", len(large_number))
-print("Small number digits:", len(small_number))
-print("Execution time:", execution_time, "seconds")
+print("=== PERFORMANCE TEST RESULTS ===")
+print(f"Number of calculations : {number_of_tests}")
+print(f"Large number length    : {len(large_number)} digits")
+print(f"Small number length    : {len(small_number)} digit")
+print(f"Execution time         : {end_time - start_time:.7f} seconds")
+print(f"Peak memory            : {peak / (1024 * 1024):.6f} MB")
